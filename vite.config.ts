@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react'
+import { createRequire } from 'node:module'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 import { libInjectCss } from 'vite-plugin-lib-inject-css'
@@ -15,6 +16,19 @@ import { libInjectCss } from 'vite-plugin-lib-inject-css'
 //
 // `cssCodeSplit` must stay true: library mode defaults it to false, which
 // concatenates every stylesheet into one and takes CSS tree-shaking with it.
+const { dependencies = {}, peerDependencies = {} } = createRequire(import.meta.url)(
+	'./package.json',
+) as { dependencies?: Record<string, string>; peerDependencies?: Record<string, string> }
+
+// Anything the package declares, it must not also bundle. Derived from
+// package.json rather than hand-listed: a dependency added later would
+// otherwise be silently inlined, shipping a second frozen copy alongside the
+// one the consumer installs.
+const bundledDependencies = [...Object.keys(dependencies), ...Object.keys(peerDependencies)]
+
+const isDeclaredDependency = (id: string) =>
+	bundledDependencies.some((name) => id === name || id.startsWith(`${name}/`))
+
 export default defineConfig({
 	plugins: [
 		react(),
@@ -34,8 +48,10 @@ export default defineConfig({
 		cssCodeSplit: true,
 		sourcemap: true,
 		rollupOptions: {
-			// Never bundle React. Two copies in one app breaks hooks outright.
-			external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
+			// Never bundle a declared dependency. Two copies of React in one app
+			// breaks hooks outright; a second copy of anything else is dead weight
+			// the consumer downloads twice and can never dedupe.
+			external: isDeclaredDependency,
 			output: {
 				preserveModules: true,
 				preserveModulesRoot: 'src',
