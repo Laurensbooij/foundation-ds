@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Vite
+.vite/
+vite.config.ts.timestamp-*
+vitest.config.ts.timestamp-*
+
+# Test output
+coverage/
+*.lcov
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Caches
+.eslintcache
+.stylelintcache
+.npm/
+.pnpm-store/
+
+# Editor & OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Claude Code
+CLAUDE.local.md
+.claude/settings.local.json

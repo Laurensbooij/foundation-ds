@@ -1,0 +1,43 @@
+{
+  "name": "@laurensbooij/foundation-ds",
+  "version": "0.0.0",
+  "description": "Foundation — an accessible React design system, generated from a Figma token export.",
+  "license": "MIT",
+  "author": "Laurens Booij",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Laurensbooij/foundation-ds.git"
+  },
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./tokens.css": "./dist/tokens.css",
+    "./fonts.css": "./dist/fonts.css",
+    "./styles.css": "./dist/styles.css"
+  },
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=11.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "dependencies": {
+    "lucide-react": "^1.31.0"
+  }
+}
