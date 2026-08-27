@@ -15,7 +15,8 @@ env:
 permissions:
   contents: write
   pull-requests: write
-  # Required for npm provenance.
+  # The whole basis of trusted publishing: lets the runner mint a short-lived
+  # OIDC token that npm exchanges for publish rights. No stored secret.
   id-token: write
 
 jobs:
@@ -29,15 +30,61 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
           registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm >= 11.5.1. Node 24 ships a new enough npm,
+      # but the floor is asserted rather than assumed — a silent downgrade would
+      # surface as a confusing auth error at publish time.
+      - name: Assert npm supports trusted publishing
+        run: |
+          required=11.5.1
+          actual=$(npm --version)
+          if [ "$(printf '%s\n%s\n' "$required" "$actual" | sort -V | head -1)" != "$required" ]; then
+            echo "npm $actual is older than $required, which trusted publishing requires." >&2
+            exit 1
+          fi
+          echo "npm $actual"
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+
+      # Opens (or updates) the "version packages" PR while changesets are
+      # pending. Publishing is deliberately NOT delegated to this action:
+      # `changeset publish` shells out to the repo's own package manager, and
+      # pnpm 11's OIDC support is broken (pnpm/pnpm#11513).
       - uses: changesets/action@v1
+        id: changesets
         with:
-          publish: pnpm release
           version: pnpm changeset version
           commit: 'chore(release): version packages'
           title: 'chore(release): version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
+
+      # Runs once the version PR has been merged and no changesets remain.
+      # Idempotent: later pushes to main re-check and do nothing.
+      #
+      # Auth resolves in this order, which is why this step needs no change
+      # when the bootstrap token goes away:
+      #   1. OIDC, once a trusted publisher is configured for the package
+      #   2. NODE_AUTH_TOKEN, the fallback for the very first publish
+      #
+      # npm cannot configure a trusted publisher for a package that does not
+      # exist yet (npm/cli#8544), so 0.1.0 has to go out on a token. Delete the
+      # NPM_TOKEN secret once trusted publishing is configured.
+      - name: Publish to npm
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version is already published — nothing to do."
+            exit 0
+          fi
+
+          # access and provenance both come from publishConfig in package.json.
+          npm publish
+          git tag "v$version"
+          git push origin "v$version"

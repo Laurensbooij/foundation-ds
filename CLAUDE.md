@@ -64,4 +64,5 @@ glyphs. Check every port against Figma.
   titles are Conventional Commits too.
 - Feature branches may be pushed; **main is never pushed directly**.
 - Releases go through **Changesets** — every user-facing change needs a
-  changeset.
+  changeset. Merging the "version packages" PR publishes to npm via **trusted
+  publishing** (ADR-0008); there is no local publish and no stored npm token.

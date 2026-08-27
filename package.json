@@ -49,7 +49,6 @@
     "build-storybook": "storybook build",
     "verify:package": "publint --strict && attw --pack . --profile node16 --ignore-rules cjs-resolves-to-esm --exclude-entrypoints ./tokens.css ./fonts.css ./styles.css",
     "changeset": "changeset",
-    "release": "changeset publish",
     "prepare": "husky"
   },
   "peerDependencies": {
