@@ -1,0 +1,91 @@
+.iconButton {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	/* See Button: the ring is a spacer plus a ring, composed from tokens. */
+	--ring-color: var(--focus-ring);
+	--focus-shadow:
+		0 0 0 var(--border-width-strong) var(--focus-ring-gap),
+		0 0 0 calc(var(--border-width-strong) * 2) var(--ring-color);
+
+	border: var(--border-width) solid transparent;
+
+	/* radius/md, not a pill, so it reads as a tool rather than an action. */
+	border-radius: var(--radius-md);
+	cursor: pointer;
+	transition:
+		background-color var(--dur-fast) var(--ease-standard),
+		border-color var(--dur-fast) var(--ease-standard),
+		transform var(--dur-fast) var(--ease-standard);
+}
+
+.iconButton:focus-visible {
+	outline: none;
+	box-shadow: var(--focus-shadow);
+}
+
+.iconButton:disabled {
+	opacity: var(--state-disabled-opacity);
+	cursor: not-allowed;
+}
+
+.iconButton:not(:disabled):active {
+	transform: translateY(1px) scale(0.985);
+}
+
+.sm {
+	inline-size: var(--space-8);
+	block-size: var(--space-8);
+}
+
+.md {
+	inline-size: var(--space-10);
+	block-size: var(--space-10);
+}
+
+.lg {
+	inline-size: var(--space-12);
+	block-size: var(--space-12);
+}
+
+.solid {
+	background-color: var(--accent);
+	color: var(--accent-contrast);
+}
+
+.solid:not(:disabled):hover {
+	background-color: var(--accent-hover);
+}
+
+.solid:not(:disabled):active {
+	background-color: var(--accent-press);
+}
+
+.outline {
+	background-color: var(--surface-card);
+	border-color: var(--border-default);
+	color: var(--text-body);
+}
+
+.outline:not(:disabled):hover {
+	background-color: var(--state-hover-tint);
+	border-color: var(--border-strong);
+}
+
+.outline:not(:disabled):active {
+	background-color: var(--state-press-tint);
+}
+
+.ghost {
+	background-color: transparent;
+	color: var(--text-body);
+}
+
+.ghost:not(:disabled):hover {
+	background-color: var(--state-hover-tint);
+}
+
+.ghost:not(:disabled):active {
+	background-color: var(--state-press-tint);
+}

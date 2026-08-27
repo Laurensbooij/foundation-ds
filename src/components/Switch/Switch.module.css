@@ -1,0 +1,99 @@
+.switch {
+	/* The 44x26 track and its 18px knob travel are the switch's own geometry,
+	   not steps on the spacing ramp. Declared once so nothing downstream
+	   hard-codes them. */
+	--track-width: 2.75rem;
+	--knob-travel: 1.125rem;
+
+	display: inline-flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-1);
+}
+
+.switch:has(.input:disabled) {
+	opacity: var(--state-disabled-opacity);
+}
+
+/* The native checkbox stays in the accessibility tree and keeps the whole
+   keyboard model; only its painting is replaced. Never `display: none`, which
+   would take it out of the tab order too. */
+.input {
+	position: absolute;
+	inline-size: var(--space-05);
+	block-size: var(--space-05);
+	margin: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+.control {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-3);
+	cursor: pointer;
+}
+
+.input:disabled + .control {
+	cursor: not-allowed;
+}
+
+.track {
+	--ring-color: var(--focus-ring);
+	--focus-shadow:
+		0 0 0 var(--border-width-strong) var(--focus-ring-gap),
+		0 0 0 calc(var(--border-width-strong) * 2) var(--ring-color);
+
+	position: relative;
+	flex: none;
+	inline-size: var(--track-width);
+	block-size: var(--space-6);
+	background-color: var(--border-default);
+	border-radius: var(--radius-pill);
+	transition: background-color var(--dur-fast) var(--ease-standard);
+}
+
+.input:focus-visible + .control .track {
+	box-shadow: var(--focus-shadow);
+}
+
+.knob {
+	position: absolute;
+	inset-block-start: var(--space-05);
+	inset-inline-start: var(--space-05);
+	inline-size: var(--space-5);
+	block-size: var(--space-5);
+	background-color: var(--white);
+	border-radius: var(--radius-pill);
+	box-shadow: var(--shadow-1);
+	transition:
+		translate var(--dur-fast) var(--ease-standard),
+		scale var(--dur-fast) var(--ease-standard);
+}
+
+/* Press shrinks the knob; it does not move. Declared before the checked rules
+   so the two never fight over specificity order. */
+.control:active .knob {
+	scale: 0.92;
+}
+
+.input:checked + .control .track {
+	background-color: var(--accent);
+}
+
+.input:checked + .control .knob {
+	translate: var(--knob-travel) 0;
+}
+
+.label {
+	font: var(--body-sm);
+	color: var(--text-strong);
+}
+
+/* Indented to sit under the label text rather than under the track. */
+.description {
+	padding-inline-start: calc(var(--track-width) + var(--space-3));
+	font: var(--body-sm);
+	color: var(--text-muted);
+}

@@ -1,0 +1,43 @@
+.badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-1);
+	padding-block: var(--space-1);
+	padding-inline: var(--space-3);
+	border-radius: var(--radius-pill);
+	font: var(--label-caps);
+
+	/* Uppercase with tracking, never sentence case — the only uppercase in the
+	   system besides the micro-label it shares a ramp with. */
+	text-transform: uppercase;
+	letter-spacing: var(--tracking-caps);
+	white-space: nowrap;
+}
+
+/* Figma binds the neutral badge straight to the ink ramp rather than to a
+   semantic token, unlike the other four tones. There is no semantic token for
+   a neutral chip background, so the primitive is the honest match. */
+.neutral {
+	background-color: var(--ink-100);
+	color: var(--text-body);
+}
+
+.accent {
+	background-color: var(--accent-soft);
+	color: var(--accent-soft-text);
+}
+
+.amber {
+	background-color: var(--surface-warning-soft);
+	color: var(--warning-soft-text);
+}
+
+.danger {
+	background-color: var(--danger-soft);
+	color: var(--danger-soft-text);
+}
+
+.inverse {
+	background-color: var(--surface-inverse);
+	color: var(--text-inverse);
+}
