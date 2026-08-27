@@ -22,10 +22,15 @@ the time it is ported. File:
       a caution, corrected badge glyphs, renamed puzzle layers, fixed the
       swapped axis labels, added the missing `danger` column, corrected the
       usage and subtitle copy
-- [ ] **Rename the file** → **Foundation** — **manual, in the Figma UI.** The
+- [x] **Renamed the file** → **Foundation** — done manually in the Figma UI. The
       Plugin API rejects it: `Setting the document name is currently not
-    supported`.
-- [ ] **Select** — add an `invalid` state (blocked, see below)
+  supported`.
+- [x] **Select** — brought up to TextInput's structure and given an `invalid`
+      state (see below)
+- [x] **Dialog** `accent` — given neutral-confirm copy so the specimen matches
+      its documented purpose
+
+**Phase 1 is complete.**
 
 ### Premises that turned out to be wrong
 
@@ -45,25 +50,38 @@ Recorded so they are not re-litigated:
   `accent | warning | danger`). All the `win` residue was in layer names, copy
   and documentation.
 
-### Icon `Size` property — recommend dropping
+### Icon `Size` — deliberately NOT a Figma property
 
 Adding `Size` as a variant property would take Icon from **29 variants to 145**.
 Figma's own usage note says _"Name is the only property. Resize the instance to
 the context size."_ Foundations already documents the scale
 (`xs` 12 · `sm` 16 · `md` 20 · `lg` 24 · `xl` 32) at `3:3534`, which is what the
-code's `size` prop implements. Instance resizing is the correct Figma idiom
-here; the code prop needs no Figma variant to justify it.
+code's `size` prop implements. Instance resizing is the correct Figma idiom.
 
-### Select `invalid` — blocked on a scope decision
+**This is a deliberate, bounded exception to ADR-0001.** `Icon`'s `size` prop
+has no matching Figma variant property, and should not gain one. The scale it
+implements is the one Foundations documents.
 
-`TextInput` is `label` + `field` + `hint`, with `Label` / `Hint` boolean
-properties and text properties. **`Select` has none of that** — no hint node, no
-boolean or text properties, only `State` and `Size` variants.
+### Select — rebuilt to match TextInput
 
-WCAG SC 3.3.1 requires the error be **described in text**, so an `invalid`
-Select with nowhere to put that text cannot satisfy the condition the state was
-approved under. Adding `invalid` therefore means bringing Select up to
-TextInput's structure first.
+`Select` had no hint node and no component properties at all — only `State` and
+`Size` variants. WCAG SC 3.3.1 requires an error be **described in text**, so
+`invalid` was unimplementable until Select had somewhere to put that text.
+
+What changed:
+
+- Added a `hint` node to all 12 existing variants, using TextInput's text style
+  and `text/muted` binding. Heights now match TextInput exactly: 75 · 83 · 91.
+- Added `invalid` at all three sizes — 2px `border/danger` field, hint tinted
+  `text/danger`.
+- Added the five component properties TextInput already had: `Label` and `Hint`
+  booleans, plus `Label text`, `Value` and `Hint text`, bound across all 15
+  variants.
+- Laid the set out as a 5-state × 3-size grid, and corrected the axis labels,
+  which listed four states across three size columns.
+
+**Both field components are now structurally identical.** The port should treat
+them as one shell with two contents.
 
 ## Phase 2 — Toolchain
 

@@ -49,5 +49,11 @@ so it reads as a decision rather than an oversight.
 - Where Figma is thinner than the code needs, the fix is **to Figma first**.
   `Button` gains an `Icon` property and `Icon` gains a `Size` property in the
   file before either lands in code.
-- `Modal` stays the only exception. A second one means this ADR was wrong and
-  should be superseded, not quietly extended.
+- Exceptions come in two categories, and both are closed lists:
+  - **A component with no Figma page** — only `Modal`.
+  - **A prop with no matching Figma variant property** — only `Icon`'s `size`.
+    Making it one would take Icon from 29 variants to 145, and Figma's own note
+    says _"Name is the only property. Resize the instance to the context size."_
+    The scale it implements is the one Foundations documents at `3:3534`.
+- A third exception, in either category, means this ADR was wrong and should be
+  superseded — not quietly extended.
