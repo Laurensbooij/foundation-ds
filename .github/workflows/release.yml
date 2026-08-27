@@ -6,6 +6,12 @@ on:
 
 concurrency: release-${{ github.ref }}
 
+env:
+  # The changesets action commits the version bump, which fires the local
+  # pre-commit hook. A lint-staged failure there would break a release for a
+  # reason that has nothing to do with the release.
+  HUSKY: 0
+
 permissions:
   contents: write
   pull-requests: write

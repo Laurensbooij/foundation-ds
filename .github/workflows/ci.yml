@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
 
+env:
+  HUSKY: 0
+
 jobs:
   verify:
     runs-on: ubuntu-latest
