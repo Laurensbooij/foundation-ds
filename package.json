@@ -1,6 +1,6 @@
 {
   "name": "@laurensbooij/foundation-ds",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Foundation — an accessible React design system, generated from a Figma token export.",
   "license": "MIT",
   "author": "Laurens Booij",
