@@ -24,7 +24,7 @@ the time it is ported. File:
       usage and subtitle copy
 - [x] **Renamed the file** → **Foundation** — done manually in the Figma UI. The
       Plugin API rejects it: `Setting the document name is currently not
-  supported`.
+supported`.
 - [x] **Select** — brought up to TextInput's structure and given an `invalid`
       state (see below)
 - [x] **Dialog** `accent` — given neutral-confirm copy so the specimen matches
@@ -85,14 +85,45 @@ them as one shell with two contents.
 
 ## Phase 2 — Toolchain
 
-- [ ] Vite library mode, ESM output, `"use client"` banner step for interactive
-      components
-- [ ] CSS Modules → per-component CSS + bundled `styles.css` (ADR-0002)
-- [ ] Style Dictionary token build, `tokens/figma/` sources (ADR-0003)
-- [ ] Font copy step, variable faces, woff2 only (ADR-0004)
-- [ ] ESLint + Stylelint + Prettier, TypeScript, Vitest + `vitest-axe`
-- [ ] Storybook + `addon-a11y` + `storybook-addon-pseudo-states`
-- [ ] Changesets + GitHub Actions publish with provenance
+- [x] Vite library mode, ESM output, `'use client'` preserved (ADR-0002)
+- [x] CSS Modules → per-component CSS + bundled `styles.css` (ADR-0002)
+- [x] Style Dictionary token build, `tokens/figma/` sources (ADR-0003)
+- [x] Font build, variable faces, woff2 only (ADR-0004)
+- [x] ESLint + Stylelint + Prettier, TypeScript, Vitest + axe helper
+- [x] Storybook + `addon-a11y` + `storybook-addon-pseudo-states`
+- [x] Changesets + GitHub Actions (CI + provenance release)
+- [x] `pnpm verify:package` — publint + attw
+
+**Phase 2 is complete.** Every gate passes: format, lint, stylelint,
+typecheck, test, build, verify:package.
+
+### What the tree-shaking test found
+
+The pipeline was validated against a packed tarball consumed by a real Vite app
+before any component was written. Three defects it caught, none visible from
+inside this repo:
+
+- **The `.module.css` trap** — the emitted stylesheets must not keep the
+  `.module` infix, or a consumer's bundler re-hashes them as CSS Modules and the
+  component ships **unstyled with no error**. `assetFileNames` strips it.
+- **Build ordering** — `vite build` empties `dist/`, so the font and style steps
+  have to run after it, not before.
+- **A duplicated `'use client'`** — Rolldown already preserves directives, so
+  the directive plugin was emitting the banner twice. Plugin removed.
+
+The harness is worth keeping: `pnpm build && pnpm pack`, install the tarball in
+a throwaway app, build, grep the output. See ADR-0002.
+
+### Toolchain notes
+
+- **axe's colour-contrast rule cannot run in jsdom** (no canvas). Unit specs
+  cover structure and naming; contrast is covered by `addon-a11y` in Storybook,
+  which runs in a real browser. Do not assume a green `pnpm test` means contrast
+  is checked.
+- **Prettier's `embeddedLanguageFormatting` is `off`.** The sort-imports plugin
+  reorders code inside markdown fences, which silently inverted a documented
+  import example.
+- `vitest` runs with `passWithNoTests` until Phase 3 lands the first spec.
 
 ### Story architecture
 

@@ -13,7 +13,7 @@ Tokens ship as **CSS custom properties only**. There is no JS or TS mirror.
 Consumers import it once:
 
 ```js
-import "@laurensbooij/foundation-ds/tokens.css";
+import '@laurensbooij/foundation-ds/tokens.css'
 ```
 
 `react-ts-template` deletes its own `tokens/` directory and

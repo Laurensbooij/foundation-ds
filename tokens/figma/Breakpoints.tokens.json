@@ -1,0 +1,34 @@
+{
+  "Breakpoints": {
+    "$extensions": {
+      "tokens-bruecke-meta": {
+        "useDTCG": true,
+        "spec": "https://www.designtokens.org/tr/2025.10/format/",
+        "colorMode": "hex",
+        "variableCollections": [
+          "Primitives",
+          "Color",
+          "Spacing",
+          "Typography",
+          "Effect-styles",
+          "Motion",
+          "Breakpoints"
+        ],
+        "createdAt": "2026-08-26T00:00:00.000Z"
+      }
+    },
+    "breakpoint": {
+      "desktop": {
+        "$type": "dimension",
+        "$value": {
+          "value": 768,
+          "unit": "px"
+        },
+        "$description": "",
+        "$extensions": {
+          "mode": {}
+        }
+      }
+    }
+  }
+}

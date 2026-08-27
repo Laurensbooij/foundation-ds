@@ -1,0 +1,168 @@
+import StyleDictionary from 'style-dictionary'
+
+// One source tier (ADR-0003): tokens/figma/ holds TokensBrücke-format JSON.
+// The template ships hand-written starter values in that format, so a real
+// TokensBrücke export from Figma can replace them wholesale later — except
+// Breakpoints.tokens.json, which has no Figma collection and survives an
+// export. Rebuild with `pnpm tokens`.
+
+// Figma lets a variable be both a value and a namespace: `accent` is a colour
+// and `accent/hover` is another. TokensBrücke nests the second inside the
+// first, and Style Dictionary stops at the value — silently dropping every
+// child. Hoisting them to siblings restores them under the name they would
+// have had anyway (`accent/hover` → `--accent-hover`).
+const hoistChildrenOfValuedTokens = (node) => {
+	for (const [key, value] of Object.entries(node)) {
+		if (key.startsWith('$') || !value || typeof value !== 'object') continue
+		hoistChildrenOfValuedTokens(value)
+		if (!('$value' in value)) continue
+		for (const [childKey, child] of Object.entries(value)) {
+			if (childKey.startsWith('$')) continue
+			delete value[childKey]
+			node[`${key}-${childKey}`] = child
+		}
+	}
+}
+
+// TokensBrücke wraps each file in its collection name (`Spacing.space.3`), but
+// CSS names must mirror the bare Figma variable path (`--space-3`) —
+// strip the wrapper before the trees merge.
+StyleDictionary.registerParser({
+	name: 'tokens-bruecke/strip-collection-root',
+	pattern: /tokens\/figma\/.*\.json$/,
+	parser: ({ contents }) => {
+		const [root] = Object.values(JSON.parse(contents))
+		const collections = root.$extensions['tokens-bruecke-meta'].variableCollections
+		delete root.$extensions
+		const refPrefix = new RegExp(`\\{(?:${collections.join('|')})\\.`, 'g')
+		const stripRefPrefixes = (node) => {
+			for (const [key, value] of Object.entries(node)) {
+				if (typeof value === 'string') node[key] = value.replace(refPrefix, '{')
+				else if (value && typeof value === 'object') stripRefPrefixes(value)
+			}
+		}
+		stripRefPrefixes(root)
+		hoistChildrenOfValuedTokens(root)
+		return root
+	},
+})
+
+// Figma variables are unitless numbers, so TokensBrücke types every one of
+// them as a px dimension. Real units are a naming convention the build
+// restores: dur/stagger are milliseconds, leading is unitless ×100, tracking
+// is em ×100. Everything else converts px → rem (16px root) per the unit
+// conventions — except border-width, which must not scale.
+const FIGMA_UNITS_PER_GROUP = {
+	dur: (value) => `${value}ms`,
+	stagger: (value) => `${value}ms`,
+	leading: (value) => round(value / 100),
+	tracking: (value) => `${round(value / 100)}em`,
+	'border-width': (value) => `${value}px`,
+}
+const round = (value) => Number(value.toFixed(5))
+const pxToRem = (value) => `${round(value / 16)}rem`
+// Hoisted children keep their group as a name prefix (`border-width-strong`),
+// so match on the prefix rather than the whole first path segment.
+const figmaUnitForGroup = (group) =>
+	Object.entries(FIGMA_UNITS_PER_GROUP).find(
+		([name]) => group === name || group.startsWith(`${name}-`),
+	)?.[1] ?? pxToRem
+
+StyleDictionary.registerTransform({
+	name: 'dimension/figma-units',
+	type: 'value',
+	filter: (token) => (token.$type ?? token.type) === 'dimension',
+	transform: (token) => {
+		const raw = token.$value ?? token.value
+		const value = typeof raw === 'object' ? raw.value : Number.parseFloat(raw)
+		const restoreUnit = figmaUnitForGroup(token.path[0])
+		return restoreUnit(value)
+	},
+})
+
+// Figma holds weights as style names ("SemiBold"), not numbers.
+const WEIGHT_BY_STYLE_NAME = { Regular: 400, Medium: 500, SemiBold: 600, Bold: 700 }
+
+StyleDictionary.registerTransform({
+	name: 'fontWeight/figma-style-name',
+	type: 'value',
+	filter: (token) => token.path[0] === 'weight',
+	transform: (token) => {
+		const styleName = token.$value ?? token.value
+		const weight = WEIGHT_BY_STYLE_NAME[styleName]
+		if (weight === undefined) throw new Error(`Unmapped Figma weight style name: ${styleName}`)
+		return weight
+	},
+})
+
+// TokensBrücke reads opacity-scoped numbers as percentages and divides by 100;
+// the Figma values are already fractions (0.42), so multiply back.
+StyleDictionary.registerTransform({
+	name: 'number/tokens-bruecke-opacity-percent',
+	type: 'value',
+	filter: (token) =>
+		(token.$type ?? token.type) === 'number' && token.path.at(-1).endsWith('opacity'),
+	transform: (token) => round((token.$value ?? token.value) * 100),
+})
+
+// Replaces the built-in typography/css/shorthand (excluded from the transform
+// list below): font sizes must land in rem (unit conventions), line height as
+// a unitless number rather than the export's percentage string, and Figma's
+// fontStyle weight-name must not leak into the shorthand. The family stays
+// unquoted so outputReferences can swap it for its var() reference.
+StyleDictionary.registerTransform({
+	name: 'typography/css/shorthand-rem',
+	type: 'value',
+	transitive: true,
+	filter: (token) => (token.$type ?? token.type) === 'typography',
+	transform: (token) => {
+		const { fontWeight, fontSize, lineHeight, fontFamily } = token.$value ?? token.value
+		// Referenced sub-values arrive already transformed: sizes carry their rem
+		// unit and families their quotes (fontFamily/css).
+		const size = typeof fontSize === 'object' ? pxToRem(fontSize.value) : fontSize
+		const family = fontFamily.replaceAll("'", '')
+		if (typeof lineHeight !== 'string' || !lineHeight.endsWith('%'))
+			throw new Error(`Expected a percentage lineHeight in ${token.name}, got: ${lineHeight}`)
+		const leading = round(Number.parseFloat(lineHeight) / 100)
+		return `${fontWeight} ${size}/${leading} ${family}`
+	},
+})
+
+const sd = new StyleDictionary({
+	source: ['tokens/figma/**/*.json'],
+	parsers: ['tokens-bruecke/strip-collection-root'],
+	platforms: {
+		css: {
+			transforms: [
+				...StyleDictionary.hooks.transformGroups.css.filter(
+					(name) => name !== 'typography/css/shorthand',
+				),
+				'dimension/figma-units',
+				'fontWeight/figma-style-name',
+				'number/tokens-bruecke-opacity-percent',
+				'typography/css/shorthand-rem',
+			],
+			buildPath: 'src/styles/',
+			files: [
+				{
+					destination: 'tokens.css',
+					format: 'css/variables',
+					options: {
+						// Named header rather than a timestamped default: a timestamp would
+						// rewrite the file on every build and churn the diff.
+						fileHeader: () => [
+							'GENERATED FILE — do not edit by hand.',
+							'Built from tokens/figma/ by scripts/build-tokens.mjs (`pnpm tokens`).',
+							'Token sources use the TokensBrücke format; see ADR-0003.',
+						],
+						// Keeps semantic tokens pointing at primitives as var() references
+						// instead of flattening them to literals.
+						outputReferences: true,
+					},
+				},
+			],
+		},
+	},
+})
+
+await sd.buildAllPlatforms()

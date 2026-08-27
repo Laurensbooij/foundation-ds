@@ -1,0 +1,17 @@
+/**
+ * Storybook only. The published fonts.css declares these faces under the names
+ * tokens.css uses ("Outfit"), but @fontsource ships them as "Outfit Variable".
+ * In dev we load @fontsource directly, so the token families are re-pointed at
+ * the names it registers. Never ship this file. See ADR-0004.
+ */
+:root {
+	--family-display: 'Outfit Variable', sans-serif;
+	--family-ui: 'Public Sans Variable', sans-serif;
+	--family-numeric: 'IBM Plex Mono', monospace;
+}
+
+body {
+	background: var(--surface-page);
+	color: var(--text-body);
+	font: var(--body);
+}

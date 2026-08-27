@@ -3,7 +3,12 @@ node_modules/
 
 # Build output
 dist/
+dist-types/
+storybook-static/
 *.tsbuildinfo
+
+# Packed tarballs from the tree-shaking verification (ADR-0002)
+*.tgz
 
 # Vite
 .vite/

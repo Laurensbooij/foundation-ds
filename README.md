@@ -20,21 +20,21 @@ Import the tokens once, in your entry file. Every component's styles depend on
 them.
 
 ```js
-import "@laurensbooij/foundation-ds/tokens.css";
-import "@laurensbooij/foundation-ds/fonts.css"; // optional — see Fonts
+import '@laurensbooij/foundation-ds/tokens.css'
+import '@laurensbooij/foundation-ds/fonts.css' // optional — see Fonts
 ```
 
 Then import components normally:
 
 ```tsx
-import { Button, TextInput } from "@laurensbooij/foundation-ds";
+import { Button, TextInput } from '@laurensbooij/foundation-ds'
 
 export const SignupForm = () => (
   <form>
     <TextInput label="Email" hint="We only use this to sign you in." />
     <Button iconStart="plus">Create account</Button>
   </form>
-);
+)
 ```
 
 ## Components
@@ -57,7 +57,7 @@ webpack with `css-loader`, and Next.js all do. For environments that do not
 import the bundled sheet instead:
 
 ```js
-import "@laurensbooij/foundation-ds/styles.css";
+import '@laurensbooij/foundation-ds/styles.css'
 ```
 
 See [ADR-0002](docs/adr/0002-published-as-esm-with-per-component-css.md).
@@ -71,9 +71,9 @@ Bringing your own typefaces means skipping it and overriding three variables:
 
 ```css
 :root {
-  --family-display: "Your Display", sans-serif;
-  --family-ui: "Your UI", sans-serif;
-  --family-numeric: "Your Mono", monospace;
+  --family-display: 'Your Display', sans-serif;
+  --family-ui: 'Your UI', sans-serif;
+  --family-numeric: 'Your Mono', monospace;
 }
 ```
 

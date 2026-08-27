@@ -10,8 +10,8 @@ at build time, with a generated `dist/fonts.css` that points at them by relative
 URL. It is reachable at the `./fonts.css` subpath and is **opt-in**:
 
 ```js
-import "@laurensbooij/foundation-ds/tokens.css"; // required
-import "@laurensbooij/foundation-ds/fonts.css"; // optional
+import '@laurensbooij/foundation-ds/tokens.css' // required
+import '@laurensbooij/foundation-ds/fonts.css' // optional
 ```
 
 `@fontsource-variable/*` are **devDependencies**. Consumers never install them.

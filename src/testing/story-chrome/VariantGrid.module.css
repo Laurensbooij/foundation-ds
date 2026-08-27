@@ -1,0 +1,25 @@
+.grid {
+	display: grid;
+	gap: var(--space-4);
+	place-items: center start;
+}
+
+.axisLabel {
+	font: var(--label-caps);
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: var(--tracking-wide);
+}
+
+.rowLabel {
+	font: var(--label);
+	color: var(--text-muted);
+	justify-self: end;
+	padding-inline-end: var(--space-3);
+}
+
+.cell {
+	display: flex;
+	align-items: center;
+	min-height: var(--space-12);
+}
