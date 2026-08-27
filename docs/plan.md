@@ -12,23 +12,58 @@ Run this **before writing any component code**, so the file is the contract by
 the time it is ported. File:
 [Foundation](https://www.figma.com/design/mXleT3Wlwak23iOXkE5yHd/).
 
-- [ ] Rename the file **Default design system** → **Foundation**
-- [ ] **Delete the brand wordmark** (`3:3789`) — it still reads "Slider Puzzle"
-- [ ] Update the type specimen string _"Default design system"_ (`3:3352`)
-- [ ] **TextInput** (`24:1293`) — radius `pill` → `md`; refit the focus ring;
-      `invalid` → 2px `border/danger`
-- [ ] **Select** (`3:6439`) — radius `pill` → `md`; refit the focus ring;
-      **add an `invalid` state**
-- [ ] **Dialog** (`3:6534`) — delete the `win` variant; `tone` =
-      `accent | warning | danger`; fix the stale "Kind" doc grid
-- [ ] **Button** (`3:1984`) — add the `Icon` property
-- [ ] **Icon** (`3:1879`) — add the `Size` property (12 · 16 · 20 · 24 · 32)
+- [x] Cover wordmark → **Foundation**
+- [x] **Deleted the brand wordmark group** (`3:3786`) from Foundations
+- [x] Type specimen → _"Foundation design system"_ (`3:3352`); Brand card
+      subtitle rewritten
+- [x] **TextInput** (`24:1293`) — refit the focus ring at every size
+- [x] **Select** (`3:6439`) — refit the focus ring at every size
+- [x] **Dialog** (`3:6534`) — full `win` strip: recast the `warning` variant as
+      a caution, corrected badge glyphs, renamed puzzle layers, fixed the
+      swapped axis labels, added the missing `danger` column, corrected the
+      usage and subtitle copy
+- [ ] **Rename the file** → **Foundation** — **manual, in the Figma UI.** The
+      Plugin API rejects it: `Setting the document name is currently not
+    supported`.
+- [ ] **Select** — add an `invalid` state (blocked, see below)
 
-**On the focus ring.** In both `TextInput` and `Select` the field is drawn at
-`radius/pill` while its focus ring is drawn at ~`radius/md`, so the ring's
-corners cut inside the field's. The ring is correct and the field is wrong —
-TextInput's own usage note says _"Same 40px shell as Select — radius md."_ One
-fix resolves both symptoms in both components.
+### Premises that turned out to be wrong
+
+Recorded so they are not re-litigated:
+
+- **The field radius was never `pill`.** Both fields are `radius: 14` =
+  `radius/md`, as specified. The real defect was that `focus spacer` and
+  `focus ring` had their **heights hardcoded to the `md` size** — drawn right
+  for `md`, then copied to `sm` and `lg` without resizing. At `sm` the ring
+  overhung 16px into the hint; at `lg` it sat flush on the border.
+- **TextInput's `invalid` was already correct** — 2px, bound to a danger
+  variable, at all three sizes.
+- **Button already has `Icon left` and `Icon right` boolean properties.**
+  Nothing to add. Boolean component properties do not appear in variant names,
+  which is why the earlier metadata read missed them.
+- **Dialog's component set was already clean** (`Tone` =
+  `accent | warning | danger`). All the `win` residue was in layer names, copy
+  and documentation.
+
+### Icon `Size` property — recommend dropping
+
+Adding `Size` as a variant property would take Icon from **29 variants to 145**.
+Figma's own usage note says _"Name is the only property. Resize the instance to
+the context size."_ Foundations already documents the scale
+(`xs` 12 · `sm` 16 · `md` 20 · `lg` 24 · `xl` 32) at `3:3534`, which is what the
+code's `size` prop implements. Instance resizing is the correct Figma idiom
+here; the code prop needs no Figma variant to justify it.
+
+### Select `invalid` — blocked on a scope decision
+
+`TextInput` is `label` + `field` + `hint`, with `Label` / `Hint` boolean
+properties and text properties. **`Select` has none of that** — no hint node, no
+boolean or text properties, only `State` and `Size` variants.
+
+WCAG SC 3.3.1 requires the error be **described in text**, so an `invalid`
+Select with nowhere to put that text cannot satisfy the condition the state was
+approved under. Adding `invalid` therefore means bringing Select up to
+TextInput's structure first.
 
 ## Phase 2 — Toolchain
 
