@@ -1,0 +1,131 @@
+.button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2);
+
+	/* Foundations draws the ring as a 2px page-coloured spacer plus a 2px ring,
+	   so it reads on any surface and never disturbs layout. Composed into a
+	   custom property because every design value must still come from a token. */
+	--ring-color: var(--focus-ring);
+	--focus-shadow:
+		0 0 0 var(--border-width-strong) var(--focus-ring-gap),
+		0 0 0 calc(var(--border-width-strong) * 2) var(--ring-color);
+
+	border: var(--border-width) solid transparent;
+	border-radius: var(--radius-pill);
+	font: var(--label);
+	text-decoration: none;
+	white-space: nowrap;
+	cursor: pointer;
+	transition:
+		background-color var(--dur-fast) var(--ease-standard),
+		color var(--dur-fast) var(--ease-standard),
+		border-color var(--dur-fast) var(--ease-standard),
+		transform var(--dur-fast) var(--ease-standard);
+}
+
+/* Keyboard focus only — never on a mouse press. */
+.button:focus-visible {
+	outline: none;
+	box-shadow: var(--focus-shadow);
+}
+
+.button:disabled {
+	opacity: var(--state-disabled-opacity);
+	cursor: not-allowed;
+}
+
+/* Press darkens one step further, drops 1px and scales to .985. */
+.button:not(:disabled):active {
+	transform: translateY(1px) scale(0.985);
+}
+
+.sm {
+	block-size: var(--space-8);
+	padding-inline: var(--space-4);
+}
+
+.md {
+	block-size: var(--space-10);
+	padding-inline: var(--space-5);
+}
+
+.lg {
+	block-size: var(--space-12);
+	padding-inline: var(--space-6);
+	font: var(--body-sm);
+}
+
+.fullWidth {
+	inline-size: 100%;
+}
+
+.primary {
+	background-color: var(--accent);
+	color: var(--accent-contrast);
+}
+
+.primary:not(:disabled):hover {
+	background-color: var(--accent-hover);
+}
+
+.primary:not(:disabled):active {
+	background-color: var(--accent-press);
+}
+
+.secondary {
+	background-color: var(--surface-card);
+	border-color: var(--border-default);
+	color: var(--text-strong);
+}
+
+.secondary:not(:disabled):hover {
+	background-color: var(--state-hover-tint);
+	border-color: var(--border-strong);
+}
+
+.secondary:not(:disabled):active {
+	background-color: var(--state-press-tint);
+}
+
+.ghost {
+	background-color: transparent;
+	color: var(--text-body);
+}
+
+.ghost:not(:disabled):hover {
+	background-color: var(--state-hover-tint);
+}
+
+.ghost:not(:disabled):active {
+	background-color: var(--state-press-tint);
+}
+
+.soft {
+	background-color: var(--accent-soft);
+	color: var(--accent-soft-text);
+}
+
+.soft:not(:disabled):hover {
+	background-color: var(--accent-soft-hover);
+}
+
+.soft:not(:disabled):active {
+	background-color: var(--accent-soft-press);
+}
+
+.danger {
+	--ring-color: var(--focus-ring-danger);
+
+	background-color: var(--danger);
+	color: var(--text-inverse);
+}
+
+.danger:not(:disabled):hover {
+	background-color: var(--danger-hover);
+}
+
+.danger:not(:disabled):active {
+	background-color: var(--danger-press);
+}

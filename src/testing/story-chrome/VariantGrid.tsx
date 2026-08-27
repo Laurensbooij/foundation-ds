@@ -10,7 +10,9 @@ export interface VariantGridProps<Row extends string, Column extends string> {
 	/** Column axis values, left to right — usually size or state. */
 	columns: readonly Column[]
 	/** Renders one cell. */
-	children: (row: Row, column: Column) => ReactNode
+	renderCell: (row: Row, column: Column) => ReactNode
+	/** Hides the column axis labels, for a single-column list. */
+	hideColumnLabels?: boolean
 	className?: string
 }
 
@@ -24,26 +26,31 @@ export interface VariantGridProps<Row extends string, Column extends string> {
 export const VariantGrid = <Row extends string, Column extends string>({
 	rows,
 	columns,
-	children,
+	renderCell,
+	hideColumnLabels = columns.length === 1,
 	className,
 }: VariantGridProps<Row, Column>) => (
 	<div
 		className={cx(styles.grid, className)}
 		style={{ gridTemplateColumns: `auto repeat(${columns.length}, max-content)` }}
 	>
-		<span />
-		{columns.map((column) => (
-			<span key={column} className={styles.axisLabel}>
-				{column}
-			</span>
-		))}
+		{!hideColumnLabels && (
+			<>
+				<span />
+				{columns.map((column) => (
+					<span key={column} className={styles.axisLabel}>
+						{column}
+					</span>
+				))}
+			</>
+		)}
 
 		{rows.map((row) => (
 			<Fragment key={row}>
 				<span className={styles.rowLabel}>{row}</span>
 				{columns.map((column) => (
 					<div key={`${row}-${column}`} className={styles.cell}>
-						{children(row, column)}
+						{renderCell(row, column)}
 					</div>
 				))}
 			</Fragment>

@@ -1,4 +1,4 @@
-// The public API. Components land here in dependency order as they are ported
-// (docs/plan.md, phase 3): Icon first, since Button, IconButton, Badge and
-// Select all depend on it.
-export {}
+export { Button, BUTTON_SIZES, BUTTON_VARIANTS } from './components/Button'
+export type { ButtonProps, ButtonSize, ButtonVariant } from './components/Button'
+export { Icon, ICON_GLYPHS, ICON_SIZES } from './components/Icon'
+export type { IconName, IconProps, IconSize } from './components/Icon'

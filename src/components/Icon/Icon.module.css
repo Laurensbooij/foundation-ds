@@ -1,0 +1,33 @@
+.icon {
+	display: block;
+	flex: none;
+	color: inherit;
+}
+
+/* The scale Foundations documents (ADR-0005): 12 · 16 · 20 · 24 · 32. Icons
+   have no size tokens of their own — each step is the spacing token of the
+   same value. */
+.xs {
+	inline-size: var(--space-3);
+	block-size: var(--space-3);
+}
+
+.sm {
+	inline-size: var(--space-4);
+	block-size: var(--space-4);
+}
+
+.md {
+	inline-size: var(--space-5);
+	block-size: var(--space-5);
+}
+
+.lg {
+	inline-size: var(--space-6);
+	block-size: var(--space-6);
+}
+
+.xl {
+	inline-size: var(--space-8);
+	block-size: var(--space-8);
+}

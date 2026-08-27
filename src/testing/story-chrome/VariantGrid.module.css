@@ -1,7 +1,12 @@
 .grid {
 	display: grid;
+
+	/* Hug the content, or the auto label column absorbs the free width and
+	   pushes the whole grid to the right. */
+	inline-size: max-content;
 	gap: var(--space-4);
 	place-items: center start;
+	padding: var(--space-4);
 }
 
 .axisLabel {
