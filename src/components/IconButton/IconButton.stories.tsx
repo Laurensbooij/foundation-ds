@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { VariantGrid } from '../../testing/story-chrome'
-import { IconButton } from './IconButton'
-import { ICON_BUTTON_SIZES, ICON_BUTTON_VARIANTS } from './constants'
+import { VariantGrid } from '../../testing/story-chrome/index.js'
+import { IconButton } from './IconButton.js'
+import { ICON_BUTTON_SIZES, ICON_BUTTON_VARIANTS } from './constants.js'
 
 const meta = {
 	title: 'Components/IconButton',

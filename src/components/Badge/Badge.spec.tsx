@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { expectNoAxeViolations } from '../../testing'
-import { Badge } from './Badge'
-import { BADGE_TESTIDS } from './constants'
+import { expectNoAxeViolations } from '../../testing/index.js'
+import { Badge } from './Badge.js'
+import { BADGE_TESTIDS } from './constants.js'
 
 describe('Badge', () => {
 	it('reads out its text', () => {

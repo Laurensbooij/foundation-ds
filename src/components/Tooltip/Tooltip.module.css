@@ -1,0 +1,70 @@
+.tooltip {
+	/* Figma offsets the chip 8px from the control in every placement. */
+	--offset: var(--space-2);
+
+	position: relative;
+	display: inline-flex;
+}
+
+.chip {
+	position: absolute;
+	z-index: 1;
+	padding-block: var(--space-1);
+	padding-inline: var(--space-2);
+	background-color: var(--surface-inverse);
+	border-radius: var(--radius-xs);
+	box-shadow: var(--shadow-2);
+	color: var(--text-inverse);
+	font: var(--label);
+	white-space: nowrap;
+
+	/* Hidden by opacity rather than display, so it can fade and so the pointer
+	   can cross the gap onto it — WCAG 1.4.13 hoverable. */
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity var(--dur-fast) var(--ease-standard),
+		visibility var(--dur-fast) var(--ease-standard);
+}
+
+/* Listed before the descendant rules so specificity order stays ascending. */
+.chip:hover {
+	opacity: 1;
+	visibility: visible;
+}
+
+.tooltip:hover .chip,
+.tooltip:focus-within .chip {
+	opacity: 1;
+	visibility: visible;
+}
+
+.top {
+	inset-block-end: calc(100% + var(--offset));
+	inset-inline-start: 50%;
+	translate: -50% 0;
+}
+
+.bottom {
+	inset-block-start: calc(100% + var(--offset));
+	inset-inline-start: 50%;
+	translate: -50% 0;
+}
+
+.left {
+	inset-inline-end: calc(100% + var(--offset));
+	inset-block-start: 50%;
+	translate: 0 -50%;
+}
+
+.right {
+	inset-inline-start: calc(100% + var(--offset));
+	inset-block-start: 50%;
+	translate: 0 -50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.chip {
+		transition: none;
+	}
+}

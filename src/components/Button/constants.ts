@@ -1,4 +1,4 @@
-import type { IconSize } from '../Icon'
+import type { IconSize } from '../Icon/index.js'
 
 export const BUTTON_TESTIDS = {
 	BASE: 'button',

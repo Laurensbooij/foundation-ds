@@ -1,0 +1,24 @@
+.select {
+	flex: 1;
+	min-inline-size: 0;
+	background: none;
+	border: none;
+	color: inherit;
+	font: inherit;
+
+	/* The chevron beside it is the affordance; two would be one too many. */
+	appearance: none;
+}
+
+.select:focus {
+	outline: none;
+}
+
+.select:disabled {
+	cursor: not-allowed;
+}
+
+.chevron {
+	flex: none;
+	color: var(--text-muted);
+}

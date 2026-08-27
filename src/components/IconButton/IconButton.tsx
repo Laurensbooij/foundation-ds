@@ -2,12 +2,12 @@
 
 import type { ComponentPropsWithoutRef, FC } from 'react'
 
-import { cx } from '../../lib/cx'
-import { Icon } from '../Icon'
-import type { IconName } from '../Icon'
+import { cx } from '../../lib/cx/index.js'
+import { Icon } from '../Icon/index.js'
+import type { IconName } from '../Icon/index.js'
 import styles from './IconButton.module.css'
-import type { ICON_BUTTON_SIZES, ICON_BUTTON_VARIANTS } from './constants'
-import { ICON_BUTTON_ICON_SIZES, ICON_BUTTON_TESTIDS } from './constants'
+import type { ICON_BUTTON_SIZES, ICON_BUTTON_VARIANTS } from './constants.js'
+import { ICON_BUTTON_ICON_SIZES, ICON_BUTTON_TESTIDS } from './constants.js'
 
 /** Colour treatment, in the order the Figma grid lists them. */
 export type IconButtonVariant = (typeof ICON_BUTTON_VARIANTS)[number]

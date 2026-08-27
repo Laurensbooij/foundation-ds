@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { VariantGrid } from '../../testing/story-chrome'
-import { Button } from './Button'
-import { BUTTON_SIZES, BUTTON_VARIANTS } from './constants'
+import { VariantGrid } from '../../testing/story-chrome/index.js'
+import { Button } from './Button.js'
+import { BUTTON_SIZES, BUTTON_VARIANTS } from './constants.js'
 
 const meta = {
 	title: 'Components/Button',

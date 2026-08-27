@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { VariantGrid } from '../../testing/story-chrome'
-import { Icon } from './Icon'
-import type { IconName } from './Icon'
-import { ICON_GLYPHS, ICON_SIZES } from './constants'
+import { VariantGrid } from '../../testing/story-chrome/index.js'
+import { Icon } from './Icon.js'
+import type { IconName } from './Icon.js'
+import { ICON_GLYPHS, ICON_SIZES } from './constants.js'
 
 const meta = {
 	title: 'Components/Icon',

@@ -1,1 +1,1 @@
-export { expectNoAxeViolations } from './axe'
+export { expectNoAxeViolations } from './axe.js'

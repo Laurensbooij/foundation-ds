@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { VariantGrid } from '../../testing/story-chrome'
-import { Switch } from './Switch'
+import { VariantGrid } from '../../testing/story-chrome/index.js'
+import { Switch } from './Switch.js'
 
 const meta = {
 	title: 'Components/Switch',

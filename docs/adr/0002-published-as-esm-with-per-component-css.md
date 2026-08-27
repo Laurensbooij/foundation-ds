@@ -79,6 +79,18 @@ it. This cost an hour to find and is invisible in the library's own build.
   in `Button.js` itself. That is fine: the proxy is reachable only through the
   component, so it shakes identically.
 
+### Relative imports carry explicit extensions
+
+Every relative import in `src/` ends in `.js` — `'../Icon/index.js'`, not
+`'../Icon'`. Rolldown rewrites the runtime JS either way, but **`vite-plugin-dts`
+does not rewrite the declarations**, so extensionless directory imports survive
+into `dist/**/*.d.ts` where Node 16 ESM resolution cannot follow them. The
+package builds, publishes and runs; only consumers on
+`"moduleResolution": "node16"` see it, as broken types.
+
+`attw` catches this as `InternalResolutionError`, which is why
+`pnpm verify:package` runs in CI.
+
 ## Package verification
 
 `pnpm verify:package` runs `publint` and `attw` in CI. Three suppressions, all

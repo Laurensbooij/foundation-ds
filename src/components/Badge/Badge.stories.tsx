@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { VariantGrid } from '../../testing/story-chrome'
-import { Badge } from './Badge'
-import { BADGE_TONES } from './constants'
+import { VariantGrid } from '../../testing/story-chrome/index.js'
+import { Badge } from './Badge.js'
+import { BADGE_TONES } from './constants.js'
 
 const meta = {
 	title: 'Components/Badge',

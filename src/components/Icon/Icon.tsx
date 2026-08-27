@@ -1,9 +1,9 @@
 import type { FC, SVGProps } from 'react'
 
-import { cx } from '../../lib/cx'
+import { cx } from '../../lib/cx/index.js'
 import styles from './Icon.module.css'
-import type { ICON_SIZES } from './constants'
-import { ICON_GLYPHS, ICON_TESTIDS } from './constants'
+import type { ICON_SIZES } from './constants.js'
+import { ICON_GLYPHS, ICON_TESTIDS } from './constants.js'
 
 /** A glyph from the designed Lucide set — see `ICON_GLYPHS`. */
 export type IconName = keyof typeof ICON_GLYPHS

@@ -2,12 +2,12 @@
 
 import type { ComponentPropsWithoutRef, FC } from 'react'
 
-import { cx } from '../../lib/cx'
-import { Icon } from '../Icon'
-import type { IconName } from '../Icon'
+import { cx } from '../../lib/cx/index.js'
+import { Icon } from '../Icon/index.js'
+import type { IconName } from '../Icon/index.js'
 import styles from './Button.module.css'
-import type { BUTTON_SIZES, BUTTON_VARIANTS } from './constants'
-import { BUTTON_ICON_SIZES, BUTTON_TESTIDS } from './constants'
+import type { BUTTON_SIZES, BUTTON_VARIANTS } from './constants.js'
+import { BUTTON_ICON_SIZES, BUTTON_TESTIDS } from './constants.js'
 
 /** Colour treatment. Primary is the one main action per view; danger is destructive only. */
 export type ButtonVariant = (typeof BUTTON_VARIANTS)[number]

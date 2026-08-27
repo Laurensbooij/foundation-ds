@@ -1,0 +1,43 @@
+.modal {
+	max-inline-size: min(100% - var(--space-8), 32rem);
+	padding: var(--space-0);
+	background-color: var(--surface-card);
+	border: none;
+	border-radius: var(--radius-xl);
+	box-shadow: var(--shadow-4);
+}
+
+/* The only translucent surface in the system, and it does not blur. */
+.modal::backdrop {
+	background-color: var(--surface-scrim);
+}
+
+.modal[open] {
+	animation: rise var(--dur-medium) var(--ease-out-quint);
+}
+
+/* Focus lands on the card itself, so a screen reader reads the title and
+   description before any action, and a stray Enter cannot fire a primary. */
+.modal:focus {
+	outline: none;
+}
+
+@keyframes rise {
+	from {
+		opacity: 0;
+		translate: 0 var(--space-3);
+	}
+
+	to {
+		opacity: 1;
+		translate: 0 0;
+	}
+}
+
+/* Foundations collapses every duration to 1ms under reduced motion; there is
+   no 1ms token, and dropping the animation entirely is the same result. */
+@media (prefers-reduced-motion: reduce) {
+	.modal[open] {
+		animation: none;
+	}
+}

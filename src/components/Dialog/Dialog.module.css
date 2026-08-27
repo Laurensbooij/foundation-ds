@@ -1,0 +1,74 @@
+.dialog {
+	/* Figma draws the tone badge at 56px, which is not a step on the spacing
+	   ramp — it is the dialog's own geometry. */
+	--badge-size: 3.5rem;
+
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-5);
+	padding: var(--space-6);
+	text-align: center;
+}
+
+.dismiss {
+	position: absolute;
+	inset-block-start: var(--space-3);
+	inset-inline-end: var(--space-3);
+}
+
+.head {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--space-4);
+}
+
+/* Tone tints the badge only — never the card body. */
+.badge {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: var(--badge-size);
+	block-size: var(--badge-size);
+	border-radius: var(--radius-pill);
+}
+
+.accent {
+	background-color: var(--accent-soft);
+	color: var(--text-accent);
+}
+
+.warning {
+	background-color: var(--surface-warning-soft);
+	color: var(--warning-soft-text);
+}
+
+.danger {
+	background-color: var(--danger-soft);
+	color: var(--danger-soft-text);
+}
+
+.text {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+}
+
+.title {
+	margin: var(--space-0);
+	font: var(--heading);
+	color: var(--text-strong);
+}
+
+.description {
+	margin: var(--space-0);
+	font: var(--body-sm);
+	color: var(--text-muted);
+}
+
+.actions {
+	display: flex;
+	justify-content: center;
+	gap: var(--space-3);
+}

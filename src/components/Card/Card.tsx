@@ -1,9 +1,9 @@
 import type { ComponentPropsWithoutRef, FC } from 'react'
 
-import { cx } from '../../lib/cx'
+import { cx } from '../../lib/cx/index.js'
 import styles from './Card.module.css'
-import type { CARD_PADDINGS } from './constants'
-import { CARD_TESTIDS } from './constants'
+import type { CARD_PADDINGS } from './constants.js'
+import { CARD_TESTIDS } from './constants.js'
 
 /** Inset step: none 0 · sm 16 · md 20 · lg 24. */
 export type CardPadding = (typeof CARD_PADDINGS)[number]

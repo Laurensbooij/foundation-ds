@@ -1,11 +1,11 @@
 import type { ComponentPropsWithoutRef, FC } from 'react'
 
-import { cx } from '../../lib/cx'
-import { Icon } from '../Icon'
-import type { IconName } from '../Icon'
+import { cx } from '../../lib/cx/index.js'
+import { Icon } from '../Icon/index.js'
+import type { IconName } from '../Icon/index.js'
 import styles from './Badge.module.css'
-import type { BADGE_TONES } from './constants'
-import { BADGE_TESTIDS } from './constants'
+import type { BADGE_TONES } from './constants.js'
+import { BADGE_TESTIDS } from './constants.js'
 
 /** What the badge means. Amber is caution; danger is errors and destruction only. */
 export type BadgeTone = (typeof BADGE_TONES)[number]

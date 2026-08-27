@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { expectNoAxeViolations } from '../../testing'
-import { Icon } from './Icon'
-import type { IconName } from './Icon'
-import { ICON_GLYPHS, ICON_SIZES, ICON_TESTIDS } from './constants'
+import { expectNoAxeViolations } from '../../testing/index.js'
+import { Icon } from './Icon.js'
+import type { IconName } from './Icon.js'
+import { ICON_GLYPHS, ICON_SIZES, ICON_TESTIDS } from './constants.js'
 
 // A decorative icon has no accessible identity on purpose, so its testid is the
 // only handle for it — the case ADR-0007 reserves `getByTestId` for.

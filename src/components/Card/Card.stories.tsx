@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { VariantGrid } from '../../testing/story-chrome'
-import { Card } from './Card'
-import { CARD_PADDINGS } from './constants'
+import { VariantGrid } from '../../testing/story-chrome/index.js'
+import { Card } from './Card.js'
+import { CARD_PADDINGS } from './constants.js'
 
 const meta = {
 	title: 'Components/Card',

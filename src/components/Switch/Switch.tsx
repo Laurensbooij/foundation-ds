@@ -3,9 +3,9 @@
 import type { ComponentPropsWithoutRef, FC, ReactNode } from 'react'
 import { useId } from 'react'
 
-import { cx } from '../../lib/cx'
+import { cx } from '../../lib/cx/index.js'
 import styles from './Switch.module.css'
-import { SWITCH_TESTIDS } from './constants'
+import { SWITCH_TESTIDS } from './constants.js'
 
 export interface SwitchProps extends Omit<
 	ComponentPropsWithoutRef<'input'>,

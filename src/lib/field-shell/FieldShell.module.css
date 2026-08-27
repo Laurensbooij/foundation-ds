@@ -1,0 +1,79 @@
+.field {
+	display: inline-flex;
+	flex-direction: column;
+	gap: var(--space-1);
+	inline-size: 100%;
+}
+
+.label {
+	font: var(--label-caps);
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: var(--tracking-caps);
+}
+
+.box {
+	--ring-color: var(--focus-ring);
+	--focus-shadow:
+		0 0 0 var(--border-width-strong) var(--focus-ring-gap),
+		0 0 0 calc(var(--border-width-strong) * 2) var(--ring-color);
+
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	padding-inline: var(--space-3);
+	background-color: var(--surface-card);
+	border: var(--border-width) solid var(--border-default);
+	border-radius: var(--radius-md);
+	color: var(--text-strong);
+	transition: border-color var(--dur-fast) var(--ease-standard);
+}
+
+.box:hover {
+	border-color: var(--border-strong);
+}
+
+.box:has(:focus-visible) {
+	border-color: var(--border-strong);
+	box-shadow: var(--focus-shadow);
+}
+
+.sm .box {
+	block-size: var(--space-8);
+}
+
+.md .box {
+	block-size: var(--space-10);
+}
+
+.lg .box {
+	block-size: var(--space-12);
+	font: var(--body);
+}
+
+.hint {
+	font: var(--body-sm);
+	color: var(--text-muted);
+}
+
+/* invalid swaps the hairline for a 2px border/danger and tints the hint. */
+.invalid .box {
+	border-width: var(--border-width-strong);
+	border-color: var(--border-danger);
+}
+
+.invalid .box:has(:focus-visible) {
+	--ring-color: var(--focus-ring-danger);
+}
+
+.invalid .hint {
+	color: var(--text-danger);
+}
+
+.disabled {
+	opacity: var(--state-disabled-opacity);
+}
+
+.disabled .box:hover {
+	border-color: var(--border-default);
+}

@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { expectNoAxeViolations } from '../../testing'
-import { IconButton } from './IconButton'
+import { expectNoAxeViolations } from '../../testing/index.js'
+import { IconButton } from './IconButton.js'
 
 describe('IconButton', () => {
 	it('is named by its label, not by its glyph', () => {

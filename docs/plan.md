@@ -156,8 +156,37 @@ Cross-cutting, every component:
 
 - Strip `@i18n` / `@messages` imports (ADR-0006)
 - `cx` moves in as an internal util — **not exported**
-- `"use client"` on interactive components
+- `'use client'` on interactive components
 - Consolidated grid story + spec ending in `expectNoAxeViolations` (ADR-0007)
+
+**Phase 3 is complete.** All 11 components ship, 62 specs pass, and the
+tree-shaking harness confirms that importing only `Badge` drops the other nine
+components' JS and CSS.
+
+### What building them changed
+
+- **`TextInput` and `Select` share an internal `FieldShell`** (`src/lib/`).
+  Figma made them structurally identical, and duplicating the box, heights and
+  focus ring in both is how they would drift apart.
+- **`Modal` uses a native `<dialog>`** with `showModal()`. It is the only way
+  to get the real top layer, native focus containment and native Escape.
+  jsdom 30 implements neither `showModal` nor Escape-to-cancel, so the test
+  setup shims the former and the specs fire `cancel` directly rather than
+  simulating a keypress — asserting our handling, not the browser's.
+- **`Dialog`'s `dismissible` and `closeLabel` are a union type**, so a close
+  control without an accessible name is a compile error rather than a control
+  that silently goes missing.
+- **`Tooltip` reads `label` as well as `aria-label`** off its child. Foundation's
+  own controls take `label` and apply `aria-label` internally, so an
+  `aria-label`-only check never saw them and the chip duplicated the name.
+
+### Open design question
+
+**The `neutral` Badge is invisible on a page background.** Figma binds it to
+`ink/100`, and `surface/page` is also `ink/100`. The other four tones use
+semantic tokens; only `neutral` reaches past the layer to a primitive, which
+Foundations' own rule forbids. It reads fine on a card, which is where Figma
+draws it. Either the token binding or the rule needs to change.
 
 ## Phase 4 — Publish
 

@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import type { ReactNode } from 'react'
 
-import { cx } from '../../lib/cx'
+import { cx } from '../../lib/cx/index.js'
 import styles from './VariantGrid.module.css'
 
 export interface VariantGridProps<Row extends string, Column extends string> {

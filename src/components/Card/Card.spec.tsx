@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { expectNoAxeViolations } from '../../testing'
-import { Card } from './Card'
-import { CARD_TESTIDS } from './constants'
+import { expectNoAxeViolations } from '../../testing/index.js'
+import { Card } from './Card.js'
+import { CARD_TESTIDS } from './constants.js'
 
 describe('Card', () => {
 	it('renders its children', () => {

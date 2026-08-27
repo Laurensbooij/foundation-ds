@@ -1,2 +1,2 @@
-export { VariantGrid } from './VariantGrid'
-export type { VariantGridProps } from './VariantGrid'
+export { VariantGrid } from './VariantGrid.js'
+export type { VariantGridProps } from './VariantGrid.js'

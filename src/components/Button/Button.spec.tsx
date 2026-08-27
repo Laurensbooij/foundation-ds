@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { expectNoAxeViolations } from '../../testing'
-import { Button } from './Button'
-import { BUTTON_TESTIDS } from './constants'
+import { expectNoAxeViolations } from '../../testing/index.js'
+import { Button } from './Button.js'
+import { BUTTON_TESTIDS } from './constants.js'
 
 describe('Button', () => {
 	it('is a button named by its children', () => {

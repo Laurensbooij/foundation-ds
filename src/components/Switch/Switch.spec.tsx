@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { expectNoAxeViolations } from '../../testing'
-import { Switch } from './Switch'
+import { expectNoAxeViolations } from '../../testing/index.js'
+import { Switch } from './Switch.js'
 
 describe('Switch', () => {
 	it('is a switch named by its label', () => {
