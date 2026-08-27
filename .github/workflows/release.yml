@@ -63,18 +63,17 @@ jobs:
       # Runs once the version PR has been merged and no changesets remain.
       # Idempotent: later pushes to main re-check and do nothing.
       #
-      # Auth resolves in this order, which is why this step needs no change
-      # when the bootstrap token goes away:
-      #   1. OIDC, once a trusted publisher is configured for the package
-      #   2. NODE_AUTH_TOKEN, the fallback for the very first publish
+      # Authentication is OIDC only. NODE_AUTH_TOKEN is deliberately NOT set:
+      # setup-node writes `_authToken=$NODE_AUTH_TOKEN` into .npmrc, so an
+      # empty value produces a blank token line, and npm reads that as "auth is
+      # configured" and fails with ENEEDAUTH without ever attempting OIDC. An
+      # absent variable is not the same as an empty one.
       #
-      # npm cannot configure a trusted publisher for a package that does not
-      # exist yet (npm/cli#8544), so 0.1.0 has to go out on a token. Delete the
-      # NPM_TOKEN secret once trusted publishing is configured.
+      # 0.1.0 was bootstrapped with a token because npm cannot configure a
+      # trusted publisher for a package that does not exist yet (npm/cli#8544).
+      # That token is gone; do not reintroduce it here.
       - name: Publish to npm
         if: steps.changesets.outputs.hasChangesets == 'false'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           name=$(node -p "require('./package.json').name")
           version=$(node -p "require('./package.json').version")

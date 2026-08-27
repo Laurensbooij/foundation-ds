@@ -41,8 +41,11 @@ Two consequences shape `release.yml`:
 - **`id-token: write` in `release.yml` is load-bearing.** Removing it breaks
   publishing, and the failure reads as an auth error rather than a missing
   permission.
-- The publish step resolves auth as OIDC first, `NODE_AUTH_TOKEN` second, so it
-  needs no edit when the bootstrap token is deleted.
+- **Never set `NODE_AUTH_TOKEN` in the publish step.** `actions/setup-node`
+  writes `_authToken=$NODE_AUTH_TOKEN` into `.npmrc`, so an empty value leaves a
+  blank token line — npm reads that as "auth is configured" and fails with
+  `ENEEDAUTH` without ever attempting OIDC. An absent variable is not the same
+  as an empty one, and the 0.1.1 release failed on exactly this.
 - **Delete the `NPM_TOKEN` secret and the npm token itself** once the trusted
   publisher is configured. A bootstrap token left in place re-introduces exactly
   the risk this ADR removes.
