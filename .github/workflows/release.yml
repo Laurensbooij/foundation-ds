@@ -76,17 +76,6 @@ jobs:
       # 0.1.0 was bootstrapped with a token because npm cannot configure a
       # trusted publisher for a package that does not exist yet (npm/cli#8544).
       # That token is gone; do not reintroduce it here.
-      # TEMPORARY diagnostic — remove once the OIDC publish is confirmed working.
-      - name: Diagnose OIDC availability
-        if: steps.changesets.outputs.hasChangesets == 'false'
-        run: |
-          echo "npm: $(npm --version)"
-          echo "ACTIONS_ID_TOKEN_REQUEST_URL set: ${ACTIONS_ID_TOKEN_REQUEST_URL:+yes}${ACTIONS_ID_TOKEN_REQUEST_URL:-no}"
-          echo "NODE_AUTH_TOKEN set: ${NODE_AUTH_TOKEN:+yes}${NODE_AUTH_TOKEN:-no}"
-          echo "--- npmrc used by npm (values redacted) ---"
-          npm config get userconfig
-          sed -E 's/(_authToken=).*/\1<redacted>/' "$(npm config get userconfig)" 2>/dev/null || echo "(no userconfig file)"
-
       - name: Publish to npm
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: |
@@ -99,6 +88,8 @@ jobs:
           fi
 
           # access and provenance both come from publishConfig in package.json.
+          # verbose: an auth failure here is otherwise a bare ENEEDAUTH with no
+          # indication of whether the OIDC exchange was even attempted.
           npm publish --loglevel verbose
           git tag "v$version"
           git push origin "v$version"
