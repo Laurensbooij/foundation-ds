@@ -25,11 +25,15 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
+      # No `registry-url`: it makes setup-node write an .npmrc containing
+      # `_authToken=${NODE_AUTH_TOKEN}`, and it defaults that variable to the
+      # literal placeholder XXXXX-XXXXX-XXXXX-XXXXX. npm then sends a garbage
+      # bearer token, the registry rejects it as E404, and OIDC is never
+      # attempted. npm defaults to registry.npmjs.org anyway.
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
           cache: pnpm
-          registry-url: https://registry.npmjs.org
 
       # Trusted publishing needs npm >= 11.5.1. Node 24 ships a new enough npm,
       # but the floor is asserted rather than assumed — a silent downgrade would
