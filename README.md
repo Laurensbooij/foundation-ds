@@ -3,9 +3,6 @@
 An accessible React design system. Tokens generated from Figma, components built
 to WCAG 2.2 AA, published as ESM so consumers ship only what they import.
 
-> **Status: skeleton.** Docs and decisions only — no components yet. See
-> [docs/plan.md](docs/plan.md).
-
 ## Install
 
 ```bash
