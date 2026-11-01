@@ -1,0 +1,6 @@
+while read -r _ _ remote_ref _; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    echo "pre-push: main is never pushed directly. Open a PR." >&2
+    exit 1
+  fi
+done
